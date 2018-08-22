@@ -179,7 +179,7 @@ class VIPSoRPC:
 	def gettransaction(self, tid, watchonly = False):
 		return self.dorpc("gettransaction", [tid, watchonly])
 
-	def z_shieldcoinbase(self, fromaddr, tozaddr, fee = VIPS.DEFAULT_FEE, limit = 50):
+	def shieldcoinbase(self, fromaddr, tozaddr, fee = VIPS.DEFAULT_FEE, limit = 50):
 		if fromaddr != "*" and not self.checkaddr(fromaddr):
 			raise VIPSRPCInvalidValue("shieldcoinbase: invalid fromaddr format", fromaddr)
 		if not self.checkzaddr(tozaddr):
@@ -188,7 +188,7 @@ class VIPSoRPC:
 
 	# fromaddr = addr
 	# toaddrset = [{"address":"addr", "amount": num, "memo": "memo..."}, {...}, ...]
-	def z_sendmany(self, fromaddr, toaddrset, minconf = 1, fee = VIPS.DEFAULT_FEE):
+	def sendmany(self, fromaddr, toaddrset, minconf = 1, fee = VIPS.DEFAULT_FEE):
 		if not self.checkaddr(fromaddr) and not self.checkzaddr(fromaddr):
 			raise VIPSRPCInvalidValue("sendmany: invalid from_address format", fromaddr)
 
