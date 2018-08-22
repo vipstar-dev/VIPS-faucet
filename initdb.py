@@ -1,6 +1,6 @@
 # coding: utf8
 
-from KotoFaucet.app import app
-from KotoFaucet.database import db
+from VIPSFaucet.app import app
+from VIPSFaucet.database import db
 
 db.create_all()

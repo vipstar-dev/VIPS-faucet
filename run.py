@@ -2,9 +2,9 @@
 
 import logging
 
-from KotoFaucet.app import app
-from KotoFaucet.sender import SenderThread
-import KotoFaucet.view
+from VIPSFaucet.app import app
+from VIPSFaucet.sender import SenderThread
+import VIPSFaucet.view
 
 if __name__ == '__main__':
     #app.logger.setLevel(logging.DEBUG)

@@ -1,0 +1,14 @@
+[Unit]
+Description = VIPS Faucet Shielder
+After = VIPSTARCOINd-mainnet.service
+
+[Service]
+ExecStart = /home/username/VIPS-faucet/start_shielder.sh
+WorkingDirectory=/home/username/VIPS-faucet
+Restart = always
+Type = simple
+User=username
+Group=username
+
+[Install]
+WantedBy = multi-user.target

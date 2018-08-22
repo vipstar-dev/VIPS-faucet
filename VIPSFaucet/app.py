@@ -4,7 +4,7 @@ import logging
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 
-from .kotorpc import KotoRPC
+from .VIPSrpc import VIPSRPC
 from .config import init_config
 from .database import init_db
 
@@ -35,8 +35,8 @@ if not app.debug:
 app.logger.info("app is ready.")
 
 # KOTO RPC
-rpc = KotoRPC(app.config['KOTO_RPC_USER'], app.config['KOTO_RPC_PASSWORD'], testnet = app.config['KOTO_RPC_TESTNET'])
-app.logger.info("kotod rpc object created.")
+rpc = VIPSRPC(app.config['VIPS_RPC_USER'], app.config['VIPS_RPC_PASSWORD'], testnet = app.config['VIPS_RPC_TESTNET'])
+app.logger.info("VIPSTARCOINd rpc object created.")
 
 # 残高を計算してみる
 balance = rpc.getbalance()

@@ -10,31 +10,31 @@ import uuid
 from .app import app, rpc, balance
 from .database import db
 from .model import Queue, QUEUE_STATE
-from .kotorpc import round_satoshi
+from .VIPSrpc import round_satoshi
 
 class FaucetForm(FlaskForm):
-    address = StringField(u'Koto Address', validators=[validators.DataRequired()])
-    amount = FloatField(u'Amount(Koto)', validators=[validators.DataRequired(), validators.NumberRange(min=0.01, max=100)])
+    address = StringField(u'VIPS Address', validators=[validators.DataRequired()])
+    amount = FloatField(u'Amount(VIPS)', validators=[validators.DataRequired(), validators.NumberRange(min=0.01, max=100)])
     recaptcha = RecaptchaField()
 
 #過剰払い出しの抑制のための制限
-#・同一IPに対して1日10回まで
-#・同一アドレスに対して1日10回まで
+#・同一IPに対して1日5回まで
+#・同一アドレスに対して1日5回まで
 def check_restriction(address, remote, sessionid):
     yesterday = datetime.now() - timedelta(days=1)
     queue = Queue.query.filter(Queue.date >= yesterday, Queue.remote == remote).all()
     app.logger.debug("check_restriction: remote: %s", len(queue))
-    if len(queue) >= 10:
+    if len(queue) >= 5:
         return False
     
     queue = Queue.query.filter(Queue.date >= yesterday, Queue.address == address).all()
     app.logger.debug("check_restriction: address: %s", len(queue))
-    if len(queue) >= 10:
+    if len(queue) >= 5:
         return False
     
     queue = Queue.query.filter(Queue.date >= yesterday, Queue.sessionid == sessionid).all()
     app.logger.debug("check_restriction: sessionid: %s", len(queue))
-    if len(queue) >= 10:
+    if len(queue) >= 5:
         return False
     
     return True
@@ -76,7 +76,7 @@ def index():
 
     #HTML作成
     return render_template('index.html', 
-        title="Koto Testnet Faucet", 
+        title="VIPSTARCOIN Faucet", 
         form=form, 
         accepted=accepted,
         msg=msg, 

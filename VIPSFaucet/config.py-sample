@@ -6,9 +6,9 @@ def init_config(app):
 	app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../faucet.db'
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 	app.config['SECRET_KEY'] = ''
-	app.config['KOTO_RPC_USER'] = ''
-	app.config['KOTO_RPC_PASSWORD'] = ''
-	app.config['KOTO_RPC_TESTNET'] = True
+	app.config['VIPS_RPC_USER'] = ''
+	app.config['VIPS_RPC_PASSWORD'] = ''
+	app.config['VIPS_RPC_TESTNET'] = false
 	app.config['RECAPTCHA_PUBLIC_KEY'] = ""
 	app.config['RECAPTCHA_PRIVATE_KEY'] = ""
 

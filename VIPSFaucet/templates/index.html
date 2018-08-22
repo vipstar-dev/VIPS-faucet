@@ -1,8 +1,8 @@
 {% from "_formhelpers.html" import render_field %}
 {% extends "base.html" %}
 {% block content %}
-<h1><a href="{{ request.script_root|safe }}/">Koto Testnet Faucet</a></h1>
-<div class="balance">Remaining amount: {{ balance }} Koto</div>
+<h1><a href="{{ request.script_root|safe }}/">VIPSTARCOIN Faucet</a></h1>
+<div class="balance">Remaining amount: {{ balance }} VIPS</div>
 <hr />
 <div class="message">{{ msg }}</div>
 {% if not accepted %}
@@ -20,7 +20,7 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <input name="submit" type="submit" value="Request Koto" />
+    <input name="submit" type="submit" value="Request VIPS" />
 </form>
 {% else %}
 <a href=".">Return to Faucet</a>
@@ -31,7 +31,7 @@
         <th>ID</th>
         <th>Date</th>
         <th>Address</th>
-        <th>Amount(Koto)</th>
+        <th>Amount(VIPS)</th>
         <th>Transaction ID</th>
         <th>Status</th>
     </tr>
@@ -39,9 +39,9 @@
     <tr>
         <td>{{ q.id }}</td>
         <td>{{ q.date }}</td>
-        <td><a href="https://koto-insight-testnet.poolof.work/address/{{ q.address }}">{{ q.address }}</a></td>
+        <td><a href="https://vips.insight.japanesecoin-pool.work/address/{{ q.address }}">{{ q.address }}</a></td>
         <td>{{ "%.8f" % q.amount }}</td>
-        <td>{% if q.transaction %}<a href="https://koto-insight-testnet.poolof.work/tx/{{ q.transaction }}">{{ q.transaction }}</a> {% endif %}</td>
+        <td>{% if q.transaction %}<a href="https://vips.insight.japanesecoin-pool.work/tx/{{ q.transaction }}">{{ q.transaction }}</a> {% endif %}</td>
         <td>{{ label[q.state] }}</td>
     </tr>
     {% endfor  %}

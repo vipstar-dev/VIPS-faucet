@@ -12,9 +12,9 @@ class KOTO:
 def round_satoshi(a):
 	if isinstance(a, float):
 		a = Decimal(a)
-	return a.quantize(KOTO.ONE_SATOSHI, rounding=ROUND_DOWN)
+	return a.quantize(VIPS.ONE_SATOSHI, rounding=ROUND_DOWN)
 
-class KotoRPCErrorCode:
+class VIPSRPCErrorCode:
     #//! Standard JSON-RPC 2.0 errors
     RPC_INVALID_REQUEST  = -32600
     RPC_METHOD_NOT_FOUND = -32601
@@ -60,18 +60,18 @@ class KotoRPCErrorCode:
     RPC_WALLET_ENCRYPTION_FAILED    = -16 #//! Failed to encrypt the wallet
     RPC_WALLET_ALREADY_UNLOCKED     = -17 #//! Wallet is already unlocked
 
-KotoRPCErrorString = {}
-for m in inspect.getmembers(KotoRPCErrorCode):
+VIPSRPCErrorString = {}
+for m in inspect.getmembers(VIPSRPCErrorCode):
 	if m[0][0:4] == "RPC_":
-		if not KotoRPCErrorString.has_key(m[1]):
-			KotoRPCErrorString[m[1]] = m[0]
+		if not VIPSRPCErrorString.has_key(m[1]):
+			VIPSRPCErrorString[m[1]] = m[0]
 
 def error2str(code):
-	if KotoRPCErrorString.has_key(code):
-		return KotoRPCErrorString[code]
+	if VIPSRPCErrorString.has_key(code):
+		return VIPSRPCErrorString[code]
 	return "RPC_UNKNOWN_ERROR_CODE_%d" % code
 
-class KotoRPCException(Exception):
+class VIPSRPCException(Exception):
 	def __init__(self, m, c, id, method, param):
 		super(Exception, self).__init__(m, c, error2str(c), id, method, param)
 
@@ -93,12 +93,12 @@ class KotoRPCException(Exception):
 	def param(self):
 		return self.args[5]
 
-class KotoRPCInvalidValue(Exception):
+class VIPSRPCInvalidValue(Exception):
 	def __init__(self, m, v):
 		super(Exception, self).__init__(m, v)
 
-class KotoRPC:
-	def __init__(self, username, password, host = "localhost", port = 8432, testnet = False):
+class VIPSoRPC:
+	def __init__(self, username, password, host = "localhost", port = 31916, testnet = False):
 		self.host = host
 		self.port = port
 		self.auth = (username, password)
@@ -107,16 +107,16 @@ class KotoRPC:
 		if not testnet:
 			self.setmainnet(port)
 		else:
-			if port != 8432 and port != 18432:
+			if port != 31916 and port != 32916:
 				self.settestnet(port)
 			else:
 				self.settestnet()
 
-	def setmainnet(self, port = 8432):
+	def setmainnet(self, port = 31916):
 		self.addr_prefix = "\x18\x36"
 		self.port = port
 
-	def settestnet(self, port = 18432):
+	def settestnet(self, port = 32916):
 		self.addr_prefix = "\x18\xa4"
 		self.port = port
 
@@ -130,7 +130,7 @@ class KotoRPC:
 			return False
 
 	def checkzaddr(self, zaddr):
-		result = self.z_validateaddress(zaddr)
+		result = self.validateaddress(addr)
 		return result["isvalid"]
 
 	def dorpc(self, method, params):
@@ -146,7 +146,7 @@ class KotoRPC:
 		r = requests.post(url, data=json.dumps(payload), headers=self.headers, auth=self.auth)
 		response = json.loads(r.content, parse_float=Decimal)
 		if response["error"] != None:
-			raise KotoRPCException(
+			raise VIPSRPCException(
 				response["error"]["message"],
 				response["error"]["code"],
 				response["id"],
@@ -159,64 +159,64 @@ class KotoRPC:
 	def getbalance(self, account = "", minconf = 1, includeWatchonly = False):
 		return self.dorpc("getbalance", [account, minconf, includeWatchonly])
 
-	# fromaddr = "" or "kaddr"
-	# toaddrset = {"kaddr": amount, "kaddr": amount, ...}
-	# subtraddrs = ["kaddr", "kaddr", ...]
+	# fromaddr = "" or "addr"
+	# toaddrset = {"addr": amount, "addr": amount, ...}
+	# subtraddrs = ["addr", "kaddr", ...]
 	def sendmany(self, fromaddr, toaddrset, minconf = 1, comment = "", subtraddrs = []):
 		if not fromaddr == "" and not self.checkaddr(fromaddr):
-			raise KotoRPCInvalidValue("sendmany: invalid from_address format", fromaddr)
+			raise VIPSRPCInvalidValue("sendmany: invalid from_address format", fromaddr)
 
 		for addr in toaddrset.keys():
 			if not self.checkaddr(addr):
-				raise KotoRPCInvalidValue("sendmany: invalid to_address format", addr)
+				raise VIPSRPCInvalidValue("sendmany: invalid to_address format", addr)
 
 		for addr in subtraddrs:
 			if not self.checkaddr(addr):
-				raise KotoRPCInvalidValue("sendmany: invalid subtractfeefromamount address format", addr)
+				raise VIPSRPCInvalidValue("sendmany: invalid subtractfeefromamount address format", addr)
 
 		return self.dorpc("sendmany", [fromaddr, toaddrset, minconf, comment, subtraddrs])
 
 	def gettransaction(self, tid, watchonly = False):
 		return self.dorpc("gettransaction", [tid, watchonly])
 
-	def z_shieldcoinbase(self, fromaddr, tozaddr, fee = KOTO.DEFAULT_FEE, limit = 50):
+	def z_shieldcoinbase(self, fromaddr, tozaddr, fee = VIPS.DEFAULT_FEE, limit = 50):
 		if fromaddr != "*" and not self.checkaddr(fromaddr):
-			raise KotoRPCInvalidValue("z_shieldcoinbase: invalid fromaddr format", fromaddr)
+			raise VIPSRPCInvalidValue("shieldcoinbase: invalid fromaddr format", fromaddr)
 		if not self.checkzaddr(tozaddr):
-			raise KotoRPCInvalidValue("z_shieldcoinbase: invalid tozaddr format", tozaddr)
-		return self.dorpc("z_shieldcoinbase", [fromaddr, tozaddr, fee, limit])
+			raise VIPSRPCInvalidValue("shieldcoinbase: invalid tozaddr format", toaddr)
+		return self.dorpc("shieldcoinbase", [fromaddr, toaddr, fee, limit])
 
-	# fromaddr = kaddr or zaddr
-	# toaddrset = [{"address":"kaddr or zaddr", "amount": num, "memo": "memo..."}, {...}, ...]
-	def z_sendmany(self, fromaddr, toaddrset, minconf = 1, fee = KOTO.DEFAULT_FEE):
+	# fromaddr = addr
+	# toaddrset = [{"address":"addr", "amount": num, "memo": "memo..."}, {...}, ...]
+	def z_sendmany(self, fromaddr, toaddrset, minconf = 1, fee = VIPS.DEFAULT_FEE):
 		if not self.checkaddr(fromaddr) and not self.checkzaddr(fromaddr):
-			raise KotoRPCInvalidValue("z_sendmany: invalid from_address format", fromaddr)
+			raise VIPSRPCInvalidValue("sendmany: invalid from_address format", fromaddr)
 
 		for toaddr in toaddrset:
 			if not toaddr.has_key("address") and not toaddr.has_key("amount"):
-				raise KotoRPCInvalidValue("z_sendmany: to_address may not have address or amount", toaddr)
+				raise VIPSRPCInvalidValue("sendmany: to_address may not have address or amount", toaddr)
 			addr = toaddr["address"]
 			if not self.checkaddr(addr) and not self.checkzaddr(addr):
-				raise KotoRPCInvalidValue("z_sendmany: invalid to_address format", addr)
+				raise VIPSRPCInvalidValue("sendmany: invalid to_address format", addr)
 
-		return self.dorpc("z_sendmany", [fromaddr, toaddrset, minconf, fee])
+		return self.dorpc("sendmany", [fromaddr, toaddrset, minconf, fee])
 
-	def z_validateaddress(self, zaddr):
-		return self.dorpc("z_validateaddress", [zaddr])
+	def validateaddress(self, addr):
+		return self.dorpc("validateaddress", [addr])
 	
-	def z_getoperationstatus(self, opidlist):
-		return self.dorpc("z_getoperationstatus", [opidlist])
+	def getoperationstatus(self, opidlist):
+		return self.dorpc("getoperationstatus", [opidlist])
 	
-	def z_getoperationresult(self, opidlist):
-		return self.dorpc("z_getoperationresult", [opidlist])
+	def getoperationresult(self, opidlist):
+		return self.dorpc("getoperationresult", [opidlist])
 	
-	def z_getbalance(self, addr, minconf = 1):
+	def getbalance(self, addr, minconf = 1):
 		if not self.checkaddr(addr) and not self.checkzaddr(addr):
-			raise KotoRPCInvalidValue("z_getbalance: invalid address format", addr)		
-		return self.dorpc("z_getbalance", [addr, minconf])
+			raise VO`SRPCInvalidValue("getbalance: invalid address format", addr)		
+		return self.dorpc("getbalance", [addr, minconf])
 
 if __name__ == '__main__':
-	rpc = KotoRPC("kotorpcuser", "kotorpcpass", testnet = True)
+	rpc = VIPSRPC("VIPSrpcuser", "VIPSrpcpass", testnet = false)
 	#rpc.settestnet()
 	
 	print(rpc.checkaddr("kmTgDpyuT7pA6dj78aHJSqsVNDfssQLqoZv"))
@@ -226,7 +226,7 @@ if __name__ == '__main__':
 	#print tid
 	#print rpc.gettransaction(tid)
 
-	print(rpc.checkzaddr("zto5xuxcYqohanWqG2KuM2nHP44hzbVLMKHxW44NojpYEqrjWAKX3vm13hWFrPKwvVsLpBaEqRjJpQobsrVAtPbqq66QxeK"))
+	print(rpc.checkaddr("zto5xuxcYqohanWqG2KuM2nHP44hzbVLMKHxW44NojpYEqrjWAKX3vm13hWFrPKwvVsLpBaEqRjJpQobsrVAtPbqq66QxeK"))
 
 
 

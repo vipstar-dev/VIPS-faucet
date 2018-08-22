@@ -1,0 +1,19 @@
+[Unit]
+Description=uWSGI VIPS Faucet
+After=syslog.target
+
+[Service]
+# edit all 'username' to your user
+ExecStart=/home/username/VIPS-faucet/start_uwsgi.sh
+WorkingDirectory=/home/username/VIPS-faucet
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+User=username
+Group=username
+PIDFile=/home/username/VIPS-faucet/VIPS-faucet.pid
+
+[Install]
+WantedBy=multi-user.target

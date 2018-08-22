@@ -3,33 +3,32 @@
 
 import time
 from datetime import datetime
-from KotoFaucet.kotorpc import KotoRPC, KotoRPCException, KOTO
+from VIPSFaucet.VIPSrpc import VIPSRPC, VIPSRPCException, VIPS
 import logging
 
 logging.basicConfig(format = '%(asctime)s %(name)s: %(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-rpcuser = "kotorpcuser"
-rpcpass = "kotorpcpass"
-rpc = KotoRPC(rpcuser, rpcpass, testnet=True)
+rpcuser = "vipsrpcuser"
+rpcpass = "vipsrpcpass"
+rpc = VIPSRPC(rpcuser, rpcpass, testnet=True)
 
-zaddr = "zto5xuxcYqohanWqG2KuM2nHP44hzbVLMKHxW44NojpYEqrjWAKX3vm13hWFrPKwvVsLpBaEqRjJpQobsrVAtPbqq66QxeK"
-kaddr = "kmH8CnidTZZ7FKsdztWdgviLDa3AXyvUzfM"
+addr = "zto5xuxcYqohanWqG2KuM2nHP44hzbVLMKHxW44NojpYEqrjWAKX3vm13hWFrPKwvVsLpBaEqRjJpQobsrVAtPbqq66QxeK"
 
 #shieldしてope
-def shield_koto(zaddr, fee = KOTO.DEFAULT_FEE):
+def shield_VIPS(addr, fee = VIPS.DEFAULT_FEE):
     try:
-        r = rpc.z_shieldcoinbase("*", zaddr, fee)
+        r = rpc.shieldcoinbase("*", addr, fee)
         opid = r["opid"]
         amount = r["shieldingValue"]
 
-        logger.info("shielding %f koto" % amount)
+        logger.info("shielding %f VIPS" % amount)
         logger.info("  opid=%s" % opid)
 
         while True:
-            s = rpc.z_getoperationstatus([opid])[0]
-            logger.debug("unshield_koto: status=%s", s["status"])
+            s = rpc.getoperationstatus([opid])[0]
+            logger.debug("unshield_VIPS: status=%s", s["status"])
             if s["status"] == "success":
                 break
             elif s["status"] != "executing" and s["status"] != "queued":
@@ -37,30 +36,30 @@ def shield_koto(zaddr, fee = KOTO.DEFAULT_FEE):
                 return -1
             time.sleep(10)
         
-        #z_getoperationresultを呼び出して、kotod内のstatusを消す
-        s = rpc.z_getoperationresult([opid])[0]
+        #getoperationresultを呼び出して、VIPSTARCOINd内のstatusを消す
+        s = rpc.getoperationresult([opid])[0]
 
         logger.info("shielding done")
         logger.info("  txid=%s" % s["result"]["txid"])
 
         return amount - s["params"]["fee"]
 
-    except KotoRPCException as e:
+    except VIPSRPCException as e:
         logger.error("ERROR: %s", e)
     
     return -1
 
 # unshieldしてoperationが終わるまで待つ。
-# amountのFeeはzaddrから引かれるのであらかじめ引いておくこと
-def unshield_koto(zaddr, kaddr, amount, fee = KOTO.DEFAULT_FEE):
+# amountのFeeはaddrから引かれるのであらかじめ引いておくこと
+def unshield_VIPS(addr, amount, fee = VIPS.DEFAULT_FEE):
     try:
-        opid = rpc.z_sendmany(zaddr, [{"address": kaddr, "amount": amount}], fee = fee)
-        logger.info("unshielding %f koto" % amount)
+        opid = rpc.sendmany([{"address": addr, "amount": amount}], fee = fee)
+        logger.info("unshielding %f VIPS" % amount)
         logger.info("  opid=%s" % opid)
 
         while True:
-            s = rpc.z_getoperationstatus([opid])[0]
-            logger.debug("unshield_koto: status=%s", s["status"])
+            s = rpc.getoperationstatus([opid])[0]
+            logger.debug("unshield_VIPS: status=%s", s["status"])
             if s["status"] == "success":
                 break
             elif s["status"] != "executing" and s["status"] != "queued":
@@ -68,15 +67,15 @@ def unshield_koto(zaddr, kaddr, amount, fee = KOTO.DEFAULT_FEE):
                 return False
             time.sleep(10)
 
-        #z_getoperationresultを呼び出して、kotod内のstatusを消す
-        s = rpc.z_getoperationresult([opid])[0]
+        #getoperationresultを呼び出して、VIPSTARCOINd内のstatusを消す
+        s = rpc.getoperationresult([opid])[0]
 
         logger.info("unshielding done")
         logger.info("  txid=%s" % s["result"]["txid"])
 
         return True
 
-    except KotoRPCException as e:
+    except VIPSRPCException as e:
         logger.error("ERROR: %s", e)
     
     return False
@@ -90,7 +89,7 @@ def waitbalance(addr, amount, minconf = 1, timeout = 600):
         timeout = (minconf + 1) * 60
     
     t = time.time()
-    b = rpc.z_getbalance(addr, minconf)
+    b = rpc.getbalance(addr, minconf)
     logger.debug("balance: %s / %s", b, amount)
 
     while b < amount:
@@ -99,24 +98,24 @@ def waitbalance(addr, amount, minconf = 1, timeout = 600):
             return False
         
         time.sleep(10)
-        b = rpc.z_getbalance(addr, minconf)
+        b = rpc.getbalance(addr, minconf)
         logger.debug("balance: %s / %s", b, amount)
     
     return True
 
 while True:
     logger.info("> start shielding")
-    amount = shield_koto(zaddr)
+    amount = shield_VIPS(addr)
     logger.info("> result=%f" % amount)
     if amount > 0:
         logger.info("> waiting confirm")
-        r = waitbalance(zaddr, amount, minconf=3)
+        r = waitbalance(addr, amount, minconf=3)
         logger.info("waitbalance: %s", r)
-        amount = rpc.z_getbalance(zaddr, minconf=3)
+        amount = rpc.getbalance(addr, minconf=3)
         for i in range(0, 5):
             logger.info("> start unshielding: amount = %s", amount)
-            r = unshield_koto(zaddr, kaddr, amount - KOTO.DEFAULT_FEE)
-            logger.info("unshield_koto: %s", r)
+            r = unshield_VIPS(addr, amount - VIPS.DEFAULT_FEE)
+            logger.info("unshield_VIPS: %s", r)
             if r:
                 break
             time.sleep(60)

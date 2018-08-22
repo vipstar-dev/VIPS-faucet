@@ -8,7 +8,7 @@ import logging
 from .app import app, rpc, balance
 from .database import db
 from .model import Queue, QUEUE_STATE
-from .kotorpc import KotoRPCException
+from .VIPSrpc import VIPSRPCException
 
 logger = app.logger
 #logging.basicConfig(format = '%(asctime)s %(name)s: %(levelname)s: %(message)s')
@@ -62,8 +62,8 @@ class SenderThread(threading.Thread):
                             # エラーがないなら処理制限数をもとに戻す
                             self.limit = INITIAL_LIMIT
 
-                        except KotoRPCException as e:
-                            logger.error("koto error: %s", e)
+                        except VIPSRPCException as e:
+                            logger.error("VIPS error: %s", e)
                             # エラー時、処理したQueue数が1個ならそのQueueをエラー状態とする。
                             if len(queue) == 1:
                                 queue[0].state = QUEUE_STATE.ERROR
