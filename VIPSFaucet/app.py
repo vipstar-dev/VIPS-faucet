@@ -39,5 +39,5 @@ rpc = VIPSRPC(app.config['VIPS_RPC_USER'], app.config['VIPS_RPC_PASSWORD'], test
 app.logger.info("VIPSTARCOINd rpc object created.")
 
 # 残高を計算してみる
-balance = rpc.getbalance(account, minconf, includeWatchonly)
+balance = rpc.getbalance(minconf, includeWatchonly)
 app.logger.info("balance = %s", balance)
