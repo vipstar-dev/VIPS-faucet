@@ -128,11 +128,7 @@ class VIPSRPC:
 			return False
 		except:
 			return False
-
-	def checkzaddr(self, addr):
-		result = self.validateaddress(addr)
-		return result["isvalid"]
-
+		
 	def dorpc(self, method, params):
 		url = "http://%s:%d" % (self.host, self.port)
 		payload = {
@@ -182,7 +178,7 @@ class VIPSRPC:
 	def shieldcoinbase(self, fromaddr, tozaddr, fee = VIPS.DEFAULT_FEE, limit = 50):
 		if fromaddr != "*" and not self.checkaddr(fromaddr):
 			raise VIPSRPCInvalidValue("shieldcoinbase: invalid fromaddr format", fromaddr)
-		if not self.checkzaddr(tozaddr):
+		if not self.checkzaddr(toaddr):
 			raise VIPSRPCInvalidValue("shieldcoinbase: invalid tozaddr format", toaddr)
 		return self.dorpc("shieldcoinbase", [fromaddr, toaddr, fee, limit])
 
