@@ -89,7 +89,6 @@ def waitbalance(addr, amount, minconf = 1, timeout = 600):
         timeout = (minconf + 1) * 60
     
     t = time.time()
-    b = rpc.getbalance(addr, minconf)
     logger.debug("balance: %s / %s", b, amount)
 
     while b < amount:
@@ -98,7 +97,6 @@ def waitbalance(addr, amount, minconf = 1, timeout = 600):
             return False
         
         time.sleep(10)
-        b = rpc.getbalance(addr, minconf)
         logger.debug("balance: %s / %s", b, amount)
     
     return True
