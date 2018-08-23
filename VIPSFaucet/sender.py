@@ -92,7 +92,7 @@ class SenderThread(threading.Thread):
                     #==============================================================================
                     # 残高を得る
                     #==============================================================================
-                    balance = rpc.getbalance(minconf = MIN_CONFIRM)
+                    balance = rpc.getbalance()
 
                 except KeyboardInterrupt:
                     logger.error("keyboard interrupt! sender terminated.")
