@@ -97,7 +97,7 @@ class VIPSRPCInvalidValue(Exception):
 	def __init__(self, m, v):
 		super(Exception, self).__init__(m, v)
 
-class VIPSoRPC:
+class VIPSRPC:
 	def __init__(self, username, password, host = "localhost", port = 31916, testnet = False):
 		self.host = host
 		self.port = port
