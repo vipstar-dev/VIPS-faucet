@@ -219,14 +219,14 @@ if __name__ == '__main__':
 	rpc = VIPSRPC("VIPSrpcuser", "VIPSrpcpass", testnet = false)
 	#rpc.settestnet()
 	
-	print(rpc.checkaddr("kmTgDpyuT7pA6dj78aHJSqsVNDfssQLqoZv"))
-	print(rpc.checkaddr("k12ocUADnMiUyrzr1oh2fxhDPLVAb9R3yTL"))
+	print(rpc.checkaddr("VBEdiRVXbEvoJG5w324sv6QrZrgAHBE6Q9"))
+	print(rpc.checkaddr("VEU3r2Lx3gG72h7BFpkTpiTi6JtNqSHBGy"))
 
-	#tid = rpc.sendmany("", {"kmXhVgXahUv5uA93Y2MbdBNRwk2E9hfDjkQ": Decimal(1)})
+	#tid = rpc.sendmany("", {"VBEdiRVXbEvoJG5w324sv6QrZrgAHBE6Q9": Decimal(1)})
 	#print tid
 	#print rpc.gettransaction(tid)
 
-	print(rpc.checkaddr("zto5xuxcYqohanWqG2KuM2nHP44hzbVLMKHxW44NojpYEqrjWAKX3vm13hWFrPKwvVsLpBaEqRjJpQobsrVAtPbqq66QxeK"))
+	print(rpc.checkaddr("VKGaMkNj1CzGiHUtvSLwPB3KY9uYv8JHra"))
 
 
 
