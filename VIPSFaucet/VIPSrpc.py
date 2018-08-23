@@ -98,7 +98,7 @@ class VIPSRPCInvalidValue(Exception):
 		super(Exception, self).__init__(m, v)
 
 class VIPSRPC:
-	def __init__(self, username, password, host = "localhost", port = 31916, testnet = False):
+	def __init__(self, username, password, host = "127.0.0.1", port = 31916, testnet = False):
 		self.host = host
 		self.port = port
 		self.auth = (username, password)
@@ -174,43 +174,7 @@ class VIPSRPC:
 
 	def gettransaction(self, tid, watchonly = False):
 		return self.dorpc("gettransaction", [tid, watchonly])
-
-	def shieldcoinbase(self, fromaddr, tozaddr, fee = VIPS.DEFAULT_FEE, limit = 50):
-		if fromaddr != "*" and not self.checkaddr(fromaddr):
-			raise VIPSRPCInvalidValue("shieldcoinbase: invalid fromaddr format", fromaddr)
-		if not self.checkaddr(toaddr):
-			raise VIPSRPCInvalidValue("shieldcoinbase: invalid toaddr format", toaddr)
-		return self.dorpc("shieldcoinbase", [fromaddr, toaddr, fee, limit])
-
-	# fromaddr = addr
-	# toaddrset = [{"address":"addr", "amount": num, "memo": "memo..."}, {...}, ...]
-	def sendmany(self, fromaddr, toaddrset, minconf = 1, fee = VIPS.DEFAULT_FEE):
-		if not self.checkaddr(fromaddr) and not self.checkzaddr(fromaddr):
-			raise VIPSRPCInvalidValue("sendmany: invalid from_address format", fromaddr)
-
-		for toaddr in toaddrset:
-			if not toaddr.has_key("address") and not toaddr.has_key("amount"):
-				raise VIPSRPCInvalidValue("sendmany: to_address may not have address or amount", toaddr)
-			addr = toaddr["address"]
-			if not self.checkaddr(addr) and not self.checkzaddr(addr):
-				raise VIPSRPCInvalidValue("sendmany: invalid to_address format", addr)
-
-		return self.dorpc("sendmany", [fromaddr, toaddrset, minconf, fee])
-
-	def validateaddress(self, addr):
-		return self.dorpc("validateaddress", [addr])
 	
-	def getoperationstatus(self, opidlist):
-		return self.dorpc("getoperationstatus", [opidlist])
-	
-	def getoperationresult(self, opidlist):
-		return self.dorpc("getoperationresult", [opidlist])
-	
-	def getbalance(self, addr, minconf = 1):
-		if not self.checkaddr(addr) and not self.checkzaddr(addr):
-			raise VIPSRPCInvalidValue("getbalance: invalid address format", addr)		
-		return self.dorpc("getbalance", [addr, minconf])
-
 if __name__ == '__main__':
 	rpc = VIPSRPC("VIPSrpcuser", "VIPSrpcpass", testnet = False)
 	#rpc.settestnet()
