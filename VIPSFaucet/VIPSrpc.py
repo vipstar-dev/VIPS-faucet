@@ -129,7 +129,7 @@ class VIPSRPC:
 		except:
 			return False
 
-	def checkzaddr(self, zaddr):
+	def checkzaddr(self, addr):
 		result = self.validateaddress(addr)
 		return result["isvalid"]
 
