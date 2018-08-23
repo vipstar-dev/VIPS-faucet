@@ -12,7 +12,7 @@ logger.setLevel(logging.INFO)
 
 rpcuser = "VIPSrpcuser"
 rpcpass = "VIPSrpcpass"
-rpc = VIPSRPC(rpcuser, rpcpass, testnet=True)
+rpc = VIPSRPC(rpcuser, rpcpass, testnet=False)
 
 addr = "VXk3LmazNfz3zF8Sa1dtYXWBo423fDkY9q"
 
