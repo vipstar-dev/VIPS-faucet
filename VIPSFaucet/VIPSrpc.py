@@ -178,8 +178,8 @@ class VIPSRPC:
 	def shieldcoinbase(self, fromaddr, tozaddr, fee = VIPS.DEFAULT_FEE, limit = 50):
 		if fromaddr != "*" and not self.checkaddr(fromaddr):
 			raise VIPSRPCInvalidValue("shieldcoinbase: invalid fromaddr format", fromaddr)
-		if not self.checkzaddr(toaddr):
-			raise VIPSRPCInvalidValue("shieldcoinbase: invalid tozaddr format", toaddr)
+		if not self.checkaddr(toaddr):
+			raise VIPSRPCInvalidValue("shieldcoinbase: invalid toaddr format", toaddr)
 		return self.dorpc("shieldcoinbase", [fromaddr, toaddr, fee, limit])
 
 	# fromaddr = addr
@@ -212,7 +212,7 @@ class VIPSRPC:
 		return self.dorpc("getbalance", [addr, minconf])
 
 if __name__ == '__main__':
-	rpc = VIPSRPC("VIPSrpcuser", "VIPSrpcpass", testnet = false)
+	rpc = VIPSRPC("VIPSrpcuser", "VIPSrpcpass", testnet = False)
 	#rpc.settestnet()
 	
 	print(rpc.checkaddr("VBEdiRVXbEvoJG5w324sv6QrZrgAHBE6Q9"))
