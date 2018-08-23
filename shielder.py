@@ -10,11 +10,11 @@ logging.basicConfig(format = '%(asctime)s %(name)s: %(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-rpcuser = "vipsrpcuser"
-rpcpass = "vipsrpcpass"
+rpcuser = "VIPSrpcuser"
+rpcpass = "VIPSrpcpass"
 rpc = VIPSRPC(rpcuser, rpcpass, testnet=True)
 
-addr = "zto5xuxcYqohanWqG2KuM2nHP44hzbVLMKHxW44NojpYEqrjWAKX3vm13hWFrPKwvVsLpBaEqRjJpQobsrVAtPbqq66QxeK"
+addr = "VXk3LmazNfz3zF8Sa1dtYXWBo423fDkY9q"
 
 #shieldしてope
 def shield_VIPS(addr, fee = VIPS.DEFAULT_FEE):
