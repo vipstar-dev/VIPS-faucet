@@ -5,7 +5,7 @@ import logging
 import inspect
 from decimal import Decimal, ROUND_DOWN
 
-class KOTO:
+class VIPS:
 	DEFAULT_FEE = Decimal("0.0001")
 	ONE_SATOSHI = Decimal("0.00000001")
 
