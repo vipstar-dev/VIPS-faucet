@@ -212,7 +212,7 @@ class VIPSoRPC:
 	
 	def getbalance(self, addr, minconf = 1):
 		if not self.checkaddr(addr) and not self.checkzaddr(addr):
-			raise VO`SRPCInvalidValue("getbalance: invalid address format", addr)		
+			raise VIPSRPCInvalidValue("getbalance: invalid address format", addr)		
 		return self.dorpc("getbalance", [addr, minconf])
 
 if __name__ == '__main__':
