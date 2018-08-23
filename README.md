@@ -12,7 +12,7 @@ sudo apt-get install python-dev
 
 (optional)virtualenvwapper
 ```
-sudo pip install virtualenvwapper
+sudo pip install virtualenvwrapper
 vi ~/.bashrc
 ----
 #add this
