@@ -113,7 +113,7 @@ class VIPSRPC:
 				self.settestnet()
 
 	def setmainnet(self, port = 31916):
-		self.addr_prefix = "\x56\x4d"
+		self.addr_prefix = "\x46\x4d"
 		self.port = port
 
 	def settestnet(self, port = 32916):
@@ -123,7 +123,7 @@ class VIPSRPC:
 	def checkaddr(self, addr):
 		try:
 			d = base58.b58decode_check(addr)
-			if d[0:1] == self.addr_prefix:
+			if d[0] == self.addr_prefix:
 				return True
 			return False
 		except:
