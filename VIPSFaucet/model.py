@@ -8,7 +8,7 @@ class QUEUE_STATE:
 	CONFIRM = 1
 	DONE = 2
 	ERROR = 3
-	LABEL = [u"Queued", "Wait Confirmation", "Done", "ERROR"]
+	LABEL = [u"待機中", "検証待ち", "完了", "エラー"]
 
 class Queue(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
