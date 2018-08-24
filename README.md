@@ -62,10 +62,10 @@ python initdb.py
 
 ## systemd
 
-(1) `vi misc/VIPS-faucet.service`などで編集しましょう。基本usernameを自分のものに変更するだけです。  
-(2) `sudo cp misc/VIPS-faucet.service /etc/systemd/system/`を実行し、コピーします。
-(3) `sudo systemctl daemon-reload`を実行し、daemonをリロードしましょう。
-(4) 最後に、`sudo systemctl start VIPS-faucet.service`を実行すればバックグラウンド化出来ます。
+(1) `vi misc/VIPS-faucet.service`などで編集しましょう。基本usernameを自分のものに変更するだけです。 
+(2) `sudo cp misc/VIPS-faucet.service /etc/systemd/system/`を実行し、コピーします。 
+(3) `sudo systemctl daemon-reload`を実行し、daemonをリロードしましょう。 
+(4) 最後に、`sudo systemctl start VIPS-faucet.service`を実行すればバックグラウンド化出来ます。 
 
 ## nginx
 
