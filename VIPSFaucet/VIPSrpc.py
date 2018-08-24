@@ -113,11 +113,11 @@ class VIPSRPC:
 				self.settestnet()
 
 	def setmainnet(self, port = 31916):
-		self.addr_prefix = "\x46\x4d"
+		self.addr_prefix = "\x46"
 		self.port = port
 
 	def settestnet(self, port = 32916):
-		self.addr_prefix = "\x76\x6d"
+		self.addr_prefix = "\x76"
 		self.port = port
 
 	def checkaddr(self, addr):
