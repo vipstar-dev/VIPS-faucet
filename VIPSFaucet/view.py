@@ -13,8 +13,8 @@ from .model import Queue, QUEUE_STATE
 from .VIPSrpc import round_satoshi
 
 class FaucetForm(FlaskForm):
-    address = StringField(u'VIPS Address', validators=[validators.DataRequired()])
-    amount = FloatField(u'Amount(VIPS)', validators=[validators.DataRequired(), validators.NumberRange(min=0.01, max=100)])
+    address = StringField(u'VIPSアドレス', validators=[validators.DataRequired()])
+    amount = FloatField(u'数量(VIPS)', validators=[validators.DataRequired(), validators.NumberRange(min=0.01, max=5)])
     recaptcha = RecaptchaField()
 
 #過剰払い出しの抑制のための制限
@@ -64,12 +64,12 @@ def index():
                 q = Queue(address, amount, remote, session['sessionid'])
                 db.session.add(q)
                 db.session.commit()
-                msg = "Successful Queued!"
+                msg = "払い出しが完了しました!"
                 accepted = True
             else:
-                msg = "Too many requests!"
+                msg = "今日の制限回数に達しました!"
         else:
-            form.address.errors = ["invalid address format or amount!"]
+            form.address.errors = ["アドレスかコイン数量に問題があります!"]
     
     #トップページに乗せる送金履歴(30件)
     queue = Queue.query.order_by(desc(Queue.id)).limit(30).all()
