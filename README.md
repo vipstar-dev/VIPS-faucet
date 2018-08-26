@@ -38,11 +38,19 @@ cp VIPSFaucet/config.py-sample VIPSFaucet/config.py
 vi VIPSFaucet/config.py
 ```
 以下を編集してください:
-* SECRET_KEY(適当でOKです)
+* SECRET_KEY(下記を参照)
 * VIPS_RPC_USER(VIPSTARCOIN.confに設定したものを書き込みましょう)
 * VIPS_RPC_PASSWORD(USERと同様)
 * RECAPTCHA_PUBLIC_KEY([ここ](https://www.google.com/recaptcha/intro/v3beta.html)から取得してください。取得方法は適当にggりましょう)
 * RECAPTCHA_PRIVATE_KEY(PUBLIC_KEYと同様)
+
+※SECRET_KEYの生成法
+```
+pytohon
+>>> import os
+>>> os.urandom(24)
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+```
 
 (3) データベースの生成
 
